@@ -18,3 +18,8 @@
 #  {category_id: 1, number: "UNV21200", name: "Universal® White Copy Paper, (8.5 x 11, 20 lbs, 92 Bright, 5000/Carton)", slug: "universal-white-copy-paper", price: 44.99, sale_price: 39.99, cost_price: 37.95},
 #])
 
+user1 = User.find_by_email('admin@247officesupply.com')
+user1.add_role(:admin)
+
+user2 = User.find_by_email('mjbustamante@247officesupply.com')
+user2.add_role(:admin)

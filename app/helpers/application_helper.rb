@@ -52,4 +52,7 @@ module ApplicationHelper
     link_to title, {:sort => column, :direction => direction}, {:class => css_class}
   end
   
+  def all_roles
+    roles = [['Admin','admin'], ['Sales', 'sales'], ['Support', 'support'], ['User', 'user']]
+  end
 end
