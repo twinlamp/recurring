@@ -34,6 +34,10 @@ class UsersController < ApplicationController
       if Account.find_by(:email => params[:user][:email])
         Account.find_by(:email => params[:user][:email]).update_attributes(:user_id => @user.id)
       end
+      if params[:role].present?
+        @user.roles = []
+        @user.add_role(params[:role])
+      end
       @users = User.order(sort_column + " " + sort_direction).includes(:account)
       @users = @users.paginate(:page => params[:page], :per_page => 25)
     end
@@ -43,6 +47,10 @@ class UsersController < ApplicationController
     @user = User.find_by(id: params[:id])
     puts @user.email
     if @user.update_attributes(user_params)
+      if params[:role].present?
+        @user.roles = []
+        @user.add_role(params[:role])
+      end
       flash[:notice] = "\"#{@user.email}\" has been updated"
     else
       flash[:error] = "There were some problems with the form you submitted"

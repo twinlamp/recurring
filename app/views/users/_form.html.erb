@@ -1,23 +1,33 @@
 <fieldset>
-	
-	<div class="col-md-6">
-		<%= f.label :first_name %>
-		<%= f.text_field :first_name, :class => "form-control" %>
-	</div>
-	
-	<div class="col-md-6">
-		<%= f.label :last_name %>
-		<%= f.text_field :last_name, :class => "form-control" %>
-	</div>
+  
+  <div class="col-md-6">
+    <%= f.label :first_name %>
+    <%= f.text_field :first_name, :class => "form-control" %>
+  </div>
+  
+  <div class="col-md-6">
+    <%= f.label :last_name %>
+    <%= f.text_field :last_name, :class => "form-control" %>
+  </div>
 
-	<div class="col-md-8">
-		<%= f.label :email %>
-		<%= f.email_field :email, :class => "form-control" %>
-	</div>
-	
-	<div class="col-md-4">
-		<%= f.label :phone_number %>
-		<%= f.text_field :phone_number, :class => "form-control" %>
-	</div>
+  <div class="col-md-8">
+    <%= f.label :email %>
+    <%= f.email_field :email, :class => "form-control" %>
+  </div>
+  
+  <div class="col-md-4">
+    <%= f.label :phone_number %>
+    <%= f.text_field :phone_number, :class => "form-control" %>
+  </div>
+
+  <% if @user != current_user %>
+    <div class="col-md-6">
+      <%= label_tag :role %>
+      <%= select_tag :role, options_for_select(all_roles, @user.get_role), class: "form-control", prompt: "Please select-" %>
+    </div>
+    
+    <div class="col-md-6">
+    </div>
+  <% end %>
 
 </fieldset>

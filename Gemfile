@@ -56,6 +56,9 @@ gem 'stripe'
 gem 'rufus-scheduler'
 gem 'mailgun_rails'
 
+gem 'cancancan'
+gem 'rolify'
+
 group :development, :test do
   gem 'capistrano-rails', '~> 1.1.3'
   gem 'capistrano-bundler'

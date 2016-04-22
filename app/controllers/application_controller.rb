@@ -18,9 +18,14 @@ class ApplicationController < ActionController::Base
   end
   
   def check_authorization
-    unless current_user.email.in?(["admin@247officesupply.com", "mjbustamante@247officesupply.com"])
-      redirect_to "/"
+    if current_user
+      unless current_user.has_role?(:admin)
+        redirect_to "/"
+      end
     end
+    # unless current_user.email.in?(["admin@247officesupply.com", "mjbustamante@247officesupply.com"])
+    #   redirect_to "/"
+    # end
   end
   
   def render_404(exception)
