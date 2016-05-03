@@ -1,10 +1,12 @@
 class ItemImportsController < ApplicationController
   layout "admin"
   def new
+    authorize! :create, ItemImport
     @item_import = ItemImport.new
   end
 
   def create
+    authorize! :create, ItemImport
     @item_import = ItemImport.new(params[:item_import])
     if @item_import.save
       redirect_to items_path, notice: "Imported items successfully."

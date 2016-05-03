@@ -41,4 +41,8 @@ Rails.application.configure do
 
   # Raises error for missing translations
   # config.action_view.raise_on_missing_translations = true
+
+  # Quiet Assets | https://github.com/evrone/quiet_assets
+  # Simply installing Quiet Assets will suppress the log messages automatically. However, if you wish to temporarily re-enable the logging of the asset pipeline messages set config.quiet_assets = false
+  # config.quiet_assets = false
 end
