@@ -31,8 +31,12 @@ class ApplicationController < ActionController::Base
   end
   
   def check_authorization
-    # todo it seems this is bug: when user signed in we can check his email (current_user.email), if not current_user === nil and it will fall anyway. Maybe it will be better hide sign up link for unauthorized users.
-    unless current_user.email.in?(["admin@247officesupply.com", "mjbustamante@247officesupply.com"])
+    # it seems this is bug: when user signed in we can check his email (current_user.email), if not current_user === nil and it will fall anyway. Maybe it will be better hide sign up link for unauthorized users.
+    # unless current_user.email.in?(["admin@247officesupply.com", "mjbustamante@247officesupply.com"])
+    #   redirect_to "/"
+    # end
+
+    if !current_user || !current_user.roles.any? || current_user.has_role?(:customer) || current_user.has_role?(:public)
       redirect_to "/"
     end
   end
