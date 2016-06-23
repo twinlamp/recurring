@@ -1,9 +1,6 @@
 class ItemsController < ApplicationController
   layout "admin"
   respond_to :html, :json
-
-  # load_and_authorize_resource param_method: :registration_params
-
   def index
     # @items = Item.joins("INNER JOIN order_line_items ON items.id=order_line_items.item_id").order("order_line_items.quantity DESC").group("items.id, order_line_items.quantity")
     # unless params[:keywords].blank?
@@ -18,7 +15,7 @@ class ItemsController < ApplicationController
     # end
     # @items
     # ====
-    authorize! :read, Item
+    
     @items = Item.all
     unless params[:term].blank?
       @items = @items.lookup(params[:term]) if params[:term].present?
@@ -28,19 +25,16 @@ class ItemsController < ApplicationController
   end
   
   def new
-    authorize! :create, Item
     @item = Item.new
     # @brands = Brand.active
     # @categories = Category.all
   end
   
   def show
-    authorize! :read, Item
     @item = Item.find_by(:id => params[:id])
   end
   
   def search
-    authorize! :read, Item
     @results = Item.where(nil)
     search_term = params[:keywords] if params[:keywords].present?
     search_term = params[:term] if params[:term].present?
@@ -51,9 +45,9 @@ class ItemsController < ApplicationController
   end
   
   def create
-    authorize! :create, Item
     @item = Item.create(registration_params)
-    items_with_pagination
+    @items = Item.all
+    @items = @items.paginate(:page => params[:page], :per_page => 25)
     respond_to do |format|
       format.html
       format.js
@@ -61,14 +55,12 @@ class ItemsController < ApplicationController
   end
   
   def edit
-    authorize! :update, Item
     @item = Item.find_by(:id => params[:id])
     # @brands = Brand.active
     # @categories = Category.all
   end
   
   def update
-    authorize! :update, Item
     @item = Item.find_by(:id => params[:id])
     puts params[:item][:category_tokens]
     if @item.update_attributes(registration_params)
@@ -89,26 +81,17 @@ class ItemsController < ApplicationController
   end
   
   def delete
-    authorize! :destroy, Item
     @item = Item.find_by(:id => params[:id])
   end
   
   def destroy
-    authorize! :destroy, Item
-    @item = Item.find_by(:id => params[:id])
-    @item.destroy!
-    items_with_pagination
+    e = Item.find_by(:id => params[:id])
+    e.destroy!
     respond_to do |format|
-      format.js { }
+      format.js { alert("ITem Detelet") }
     end
   end
 
-<<<<<<< HEAD
-  def items_with_pagination
-    @items = Item.all
-    @items = @items.paginate(:page => params[:page], :per_page => 25)
-  end
-=======
   # GET
   # def import_items
   # end
@@ -119,7 +102,6 @@ class ItemsController < ApplicationController
   #   ImportItemWorker.perform_async(params[:file].path)
   #   redirect_to import_file_path, notice: "File pushed to the buckground worker, please see logs for more details about rows importation"
   # end
->>>>>>> master
   
   private
 
