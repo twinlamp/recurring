@@ -3,6 +3,7 @@ class ItemImportsController < ApplicationController
   imported = 0
 
   def new
+    authorize! :create, ItemImport
     @item_import = ItemImport.new
   end
 
