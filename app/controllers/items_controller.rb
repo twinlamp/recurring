@@ -103,10 +103,23 @@ class ItemsController < ApplicationController
     end
   end
 
+<<<<<<< HEAD
   def items_with_pagination
     @items = Item.all
     @items = @items.paginate(:page => params[:page], :per_page => 25)
   end
+=======
+  # GET
+  # def import_items
+  # end
+
+  # # POST
+  # def upload_file
+  #   return redirect_to import_file_path, alert: "File is required." unless params[:file].present?
+  #   ImportItemWorker.perform_async(params[:file].path)
+  #   redirect_to import_file_path, notice: "File pushed to the buckground worker, please see logs for more details about rows importation"
+  # end
+>>>>>>> master
   
   private
 

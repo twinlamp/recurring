@@ -24,5 +24,9 @@ development:
   <<: *default
   adapter: <%= SECRET["DATABASE"]["DEV_ENGINE"] %>
   host: <%= SECRET["DATABASE"]["DEV_HOST"] %>
+<<<<<<< HEAD
   database: <%= SECRET["DATABASE"]["DEV_DB"] %>
 
+=======
+  database: <%= SECRET["DATABASE"]["DEV_DB"] %>
+>>>>>>> master

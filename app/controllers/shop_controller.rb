@@ -50,6 +50,10 @@ class ShopController < ApplicationController
     puts "SESSION --------> #{cookies.permanent.signed[:cart_id]}"
     if !cookies.permanent.signed[:cart_id].blank? and cookies.permanent.signed[:cart_id].is_a? Numeric
       @cart = Cart.find_by(:id => cookies.permanent.signed[:cart_id])
+      unless @cart.completed_at.nil?
+        @cart = Cart.create
+        cookies.permanent.signed[:cart_id] = @cart.id
+      end
     else
       @cart = Cart.create
       cookies.permanent.signed[:cart_id] = @cart.id
@@ -104,7 +108,10 @@ class ShopController < ApplicationController
     # @items = OrderLineItem.joins(:order, :item).where("orders.account_id = ?", current_user.account.id).select(:item_id).uniq(:item_id).map {|a| a.item_id}
     # @items = Item.where(id: @items).joins(:order_line_items).group(:item_id).order("order_line_items.quantity DESC")
     
-    order_ids = Order.where(:account_id => current_user.account.id).where.not(:completed_at => nil).map(&:id)
+    if current_user.account
+      order_ids = Order.where(:account_id => current_user.account.id).where.not(:completed_at => nil).map(&:id)
+    end
+    
     item_ids = OrderLineItem.where(:order_id => order_ids, :quantity => 1..Float::INFINITY).map {|q| q.item_id unless q.actual_quantity < 1}
     @items = Item.where(:id => item_ids).active.order(:name)
     @items = @items.paginate(:page => params[:page])
@@ -176,13 +183,25 @@ class ShopController < ApplicationController
     
     ###############
     
-    if !cookies.permanent.signed[:cart_id].blank? and cookies.permanent.signed[:cart_id].is_a? Numeric
-      @cart = Cart.find_or_initialize_by(:id => cookies.permanent.signed[:cart_id])
+    if params[:debug_cart_id]
+      cookies.permanent.signed[:cart_id] = params[:debug_cart_id].to_i
+      if params[:debug_cart_id] == nil
+        cookies.permanent.signed[:cart_id] = nil
+      end
+    end
+    
+    if cookies.permanent.signed[:cart_id] and cookies.permanent.signed[:cart_id].is_a? Numeric
+      if Cart.find_by(:id => cookies.permanent.signed[:cart_id])
+        @cart = Cart.find_or_initialize_by(:id => cookies.permanent.signed[:cart_id])
+      else
+        @cart = Cart.find_or_initialize_by(:id => nil)
+      end
     else
-      @cart = Cart.find_or_initialize_by(:id => cookies.permanent.signed[:cart_id])
+      @cart = Cart.find_or_initialize_by(:id => nil)
     end
     cookies.permanent.signed[:cart_id] = @cart.id
-    puts "CAAAAAAAAAAAAAAAAAAAAAAAAARRRRRRTTTTTT -> #{@cart.number}"
+    
+    puts "CCAARRTT -> #{@cart.number}"
   end
   
 end

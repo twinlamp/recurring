@@ -29,6 +29,7 @@ class InvoicesController < ApplicationController
     authorize! :create, Invoice
     invoice = Invoice.new(:date => params[:invoice][:date], :order_id => params[:order_id], :due_date => params[:invoice][:due_date])
     order = Order.find_by(:id => params[:order_id])
+    order.update_attributes(:date => params[:invoice][:date], :due_date => params[:invoice][:due_date])
     params[:lines].each do |line|
       invoice.line_item_fulfillments.new(:order_line_item_id => line[1]["order_line_item_id"], :quantity_fulfilled => line[1]["quantity_fulfill_now"])
     end

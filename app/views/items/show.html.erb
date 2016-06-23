@@ -66,20 +66,24 @@
 	<table class="table table-bordered table-striped">
 		
 		<tr>
-			<th width="20%">Number</th>
-			<th width="60%">Name</th>
+			<th width="10%">Number</th>
+			<th width="50%">Name</th>
+			<th width"10%">Slug</th>
 			<th width"10%">Price</th>
+			<th width"10%">Sale Price</th>
 			<th width"10%">Cost</th>
 		</tr>
 		
 		<tr>
 			<td><%= best_in_place @item, :number %></td>
 			<td><%= @item.name %></td>
+			<td><%= @item.slug %></td>
 			<td><%= number_to_currency(@item.price) %></td>
+			<td><%= number_to_currency(@item.sale_price) %></td>
 			<td><%= number_to_currency(@item.cost_price) %></td>
 		</tr>
 		<tr>
-			<td colspan="4"><%= best_in_place @item, :description %></td>
+			<td colspan="6"><%= best_in_place @item, :description %></td>
 		<tr>
 		
 	</table>
@@ -106,7 +110,7 @@
 					</tr>
 					<% @item.order_line_items.each do |it| %>
 					<tr>
-						<td><%= it.order.number %></td>
+						<td><%= link_to it.order.number, it.order %></td>
 						<td><%= it.order.ship_to_account_name %></td>
 						<td><%= it.actual_quantity %></td>
 						<td><%= it.price %></td>
@@ -135,11 +139,6 @@
 		</div>
 		
 	</div>
-	
-	
-	
-
-	
 	
 </div>
 
