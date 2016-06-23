@@ -26,6 +26,9 @@ class ItemImportsController < ApplicationController
     # end
   end
   
+
+
+
   def check_for_import
     #This method id for check the rows importation
     import_item = ImportHistory.last
