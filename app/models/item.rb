@@ -27,26 +27,32 @@ class Item < ActiveRecord::Base
   before_validation :slugger
   
   searchable do
-    text :number, :stored => true
-    text :name, :stored => true
-    text :description, :stored => true
-    text :slug, :stored => true
+    text :number, :stored => true, :boost => 7.0
+    text :name, :stored => true, :boost => 6.0
+    text :description, :stored => true, :boost => 5.0
+    text :slug, :stored => true, :boost => 7.0
     
-    text :category do
+    text :category, :boost => 4.0 do
       category.name if category
     end
     
-    text :brand do
+    text :brand, :boost => 3.0 do
       brand.name if brand
+    end
+    
+    text :brand, :boost => 3.0 do
+      brand.prefix if brand
     end
     
     text :item_properties do
       item_properties.map { |item_property| item_property.key }
     end
 
-    text :item_properties do
+    text :item_properties, :boost => 2.0 do
       item_properties.map { |item_property| item_property.value }
     end
+    
+    string :brand_id
  end
   
   def brand_name
@@ -96,10 +102,14 @@ class Item < ActiveRecord::Base
   
   def self.search_fulltext(word, page)
     res = Sunspot.search( Item ) do
-      fulltext word
+      fulltext word do
+        query_phrase_slop 5
+      end
+      facet(facet) if facet.present?
+      order_by(:score, :desc)
       paginate :page => page, :per_page => 10
     end
-    
+
     res.results
   end
 
@@ -108,18 +118,29 @@ class Item < ActiveRecord::Base
     res = Sunspot.search( Item ) do
       fulltext word
     end
-
+    puts res.inspect
     occurence = []
     res.results.each do |item|
-      occurence << item.number if item.number.include?(word)
-      occurence << item.name if item.name.include?(word)
-      occurence << item.description if item.description.include?(word)
-      occurence << item.number if item.number.include?(word)
-      occurence << item.slug if item.slug.include?(word)
-      occurence << item.category.name if item.category and item.category.name.include?(word)
-      occurence << item.brand.name if item.brand and item.brand.name.include?(word)
+      puts item.inspect
+      occurence << item.id if item.number and item.number.include?(word)
+      occurence << item.id if item.slug and item.slug.include?(word)
+      occurence << item.id if item.name and item.name.include?(word)
+      occurence << item.id if item.description and item.description.include?(word)
+      occurence << item.id if item.item_properties and item.item_properties.include?(word)
+      occurence << item.id if item.category and item.category.name.include?(word)
+      occurence << item.id if item.brand and item.brand.name.include?(word)
     end
-    occurence.uniq
+    occurence = occurence.compact
+    puts occurence
+    html = []
+    occurence.each do |ocr|
+      i = Item.find(ocr)
+      str = {image_path: i.default_image_path, name: i.name, number: i.number, brand: i.brand_name}
+      # str = "<li id='#{i.id}'><img src='https://s3.amazonaws.com/247officesuppy/400/400/#{i.default_image_path}' height='65px'></img><span class='brand'>#{i.brand_name}</span><span class='number'>#{i.number}</span><br/><span class='name'>#{i.name}</span></li>"
+      str = str.to_json
+      html.push(str)
+    end
+    html
   end
   
   self.per_page = 10

@@ -40,14 +40,17 @@ class ShopController < ApplicationController
   end
   
   def search
-    # @items = Item.where(nil).active
     @items = []
     @items = Item.search_fulltext(params[:keywords], params[:page]) if params[:keywords].present?
   end
   
   def search_autocomplete
-   @occurences = Item.render_auto(params[:q])
-   render json: @occurences
+    @items = Item.render_auto(params[:q])
+     respond_to do |format|
+       format.json {render json: @items}
+       format.js
+       format.html
+     end
   end
   
   def add_to_cart

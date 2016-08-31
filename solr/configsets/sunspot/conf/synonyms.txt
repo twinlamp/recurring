@@ -26,4 +26,10 @@ Television, Televisions, TV, TVs
 
 # Synonym mappings can be used for spelling correction too
 pixima => pixma
+remanufactured => compatible comp reman
+reman => comp compatible remanufactured
+comp => reman compatible remanufactured
+hp => hewlett packard hew
+lj => laserjet laser jet
+
 

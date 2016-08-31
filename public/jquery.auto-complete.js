@@ -6,7 +6,8 @@
 */
 
 (function($){
-    $.fn.autoComplete = function(options){
+	
+	$.fn.autoComplete = function(options){
         var o = $.extend({}, $.fn.autoComplete.defaults, options);
 
         // public methods
@@ -164,8 +165,16 @@
             // escape special characters
             search = search.replace(/[-\/\\^$*+?.()|[\]{}]/g, '\\$&');
             var re = new RegExp("(" + search.split(' ').join('|') + ")", "gi");
-            return '<div class="autocomplete-suggestion" data-val="' + item + '">' + item.replace(re, "<b>$1</b>") + '</div>';
+			item = JSON.parse(item)
+			console.log(item)
+            html = "<div class='autocomplete-suggestion media' data-val='" + item.number + "'>" 
+			html += "<div class='media-left'><a><img class='media-object' height='65px' src='https://s3.amazonaws.com/247officesuppy/400/400/" + item.image_path +"'></a></div>" 
+			html += "<div class='media-body'>"
+			html += "<strong>" + item.number + "</strong> <br/>" + item.name + "</div>"
+			html += "</div>";
+			return html;
         },
         onSelect: function(e, term, item){}
     };
+	
 }(jQuery));
