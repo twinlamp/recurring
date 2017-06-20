@@ -262,7 +262,13 @@ class Order < ActiveRecord::Base
   def quantity
     order_line_items.sum("COALESCE(quantity,0) - COALESCE(quantity_canceled,0)")
   end
-  
+
+  def apply_automatic_code
+    DiscountCode.automatic.each do |code|
+      create_order_discount_code(code_id: code.id) if !order_discount_code && code.appliable?(order)
+    end
+  end
+
   def shipped
     quantity_shipped == quantity
   end

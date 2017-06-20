@@ -30,7 +30,7 @@ class OrderDiscountCode < ActiveRecord::Base
   end
 
   def times_of_use_limit
-    if self.code.order_discount_codes(:reload).count >= self.code.times_of_use
+    if self.code.times_of_use && self.code.order_discount_codes(:reload).count >= self.code.times_of_use
       errors.add(:order, "Discount code is exhausted.")
     end
   end

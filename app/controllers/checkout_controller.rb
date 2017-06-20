@@ -138,6 +138,7 @@ class CheckoutController < ApplicationController
 
   def confirm
     @checkout = Checkout.find_by(:id => cookies.permanent.signed[:cart_id])
+    @checkout.apply_automatic_code
   end
   
   def complete
