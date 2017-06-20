@@ -30,6 +30,6 @@ class DiscountCodeRulesController < ApplicationController
   private
 
   def discount_code_rule_params
-    params.require(:discount_code_rule).permit(:quantity, :amount, :requirable_id, :requirable_type, :discount_code_id)
+    params.require(:discount_code_rule).permit(:quantity, :amount, :requirable_id, :requirable_type, :user_appliable_id, :user_appliable_type, :discount_code_id)
   end
 end

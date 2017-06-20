@@ -8,6 +8,7 @@
 		<th>Quantity</th>
 		<th>Amount</th>
 		<th>Requirable</th>
+		<th>User Appliable</th>
 		<th>Remove</th>
 	</tr>
 
@@ -16,6 +17,7 @@
 			<td><%= rule.quantity %></td>
 			<td><%= rule.amount %></td>
 			<td><%= rule.requirable.try(:name) %></td>
+			<td><%= rule.user_appliable_type == Group ? rule.user_appliable.name : rule.user_appliable.display_name %></td>
 			<td>
 				<%= link_to discount_code_rule_path(rule), method: :delete, remote: true do %>
 					<i class="fa fa-remove"></i>
