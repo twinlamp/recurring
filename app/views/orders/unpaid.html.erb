@@ -9,7 +9,7 @@
 		</tr>
 		
 		<% @unpaid_orders.order(:number).each_with_index do |order, idx| %>
-			<% unless order.balance_due > 0 %>
+			<% if order.balance_due > 0 %>
 		<tr>
 			<td><%= order.number %></td>
 			<td><%= order.due_date.strftime("%m/%d/%Y") unless order.due_date.blank? %></td>
