@@ -5,6 +5,7 @@ class OrderPaymentApplication < ActiveRecord::Base
 
   validate :not_over_applying
   validate :order_has_balance
+  validates :applied_amount, numericality: { greater_than: 0 }
 
   def total_applied_on_payment
     payment.applied_amount.to_d
